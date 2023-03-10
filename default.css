@@ -1,21 +1,25 @@
 :root{
-    --mainColor: #eaeaea;
-    --secondaryColor: #fff;
+    --mainColor: #15202B;
+    --secondaryColor: #192734;
 
-    --borderColor: #c1c1c1;
+    --borderColor: #164D56;
 
-    --maintext: black;
-    --secondaryText: #4b5156;
+    --maintext: #fff;
+    --secondaryText: #eeeeee;
 
-    --themeDotBorde: #24292e;
+    --themeDotBorde: #FFF;
 
-    --previewBg: rgp(251, 249, 243, 0.8);
-    --shadoww: #f0ead6;
+    --previewBg: rgb(25, 39, 52, 0.8);
+    --shadoww: #111921;
 }
 
 html, body{
     padding: 0;
     margin: 0;
+}
+
+body *{
+    transition: 0.4s;
 }
 
 h1, h2, h3, h4, h5, h6, strong{
@@ -262,28 +266,25 @@ h6{
     right: -5px;
 }
 
-.about-weapper{
-    display: grid;
-    grid-template-rows: 1fr 0.5fr; 
-    grid-template-areas: 
-        'about-me'
-        'social-links'
-    ;
-
-}
-
 .about-me{
     display: grid;
-    grid-template-rows: 1f 1f;
+    grid-template-rows: 0.5fr 0.03fr 1fr;
     grid-area: about-me;
     grid-template-areas: 
         'more-about'
+        'hr'
         'top'
     ;
 }
 
 .more-about{
     grid-area: more-about;
+}
+
+.hr-break{
+    align-items: center;
+    grid-area: hr;
+    width: 400px;
 }
 
 .top{
@@ -294,35 +295,6 @@ h6{
     display: flex;
     justify-content: space-evenly;
     background-color: var(--shadoww);
-}
-
-.social-links{
-    display: grid;
-    grid-area: social-links;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: 
-        'tw li gh'
-    ;
-}
-
-.social-links ion-icon{
-    width: 150px;
-    height: 150px;
-}
-
-#tw{
-    grid-area: tw;
-    place-self: center;
-}
-
-#li{
-    grid-area: li;
-    place-self: center;
-}
-
-#gh{
-    grid-area: gh;
-    place-self: center;
 }
 
 @media screen and (max-width: 1200px) {
@@ -343,31 +315,5 @@ h6{
     }
     .right-colum{
         justify-content: center;
-    }
-}
-
-@media screen and (max-width: 760px) {
-
-    .about-weapper{
-        grid-template-columns: 1fr;
-        grid-template-areas: 
-            'about-me'
-            'social-links'
-        ;
-    }
-
-    .social-links ion-icon{
-        width: 90px;
-        height: 90px;
-    }
-
-    .social-links{
-        display: grid;
-        grid-area: social-links;
-        padding-top: 10px;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-areas: 
-            'tw li gh'
-        ;
     }
 }
