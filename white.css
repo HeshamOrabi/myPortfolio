@@ -1,14 +1,14 @@
-:root{
-    --mainColor: #eaeaea;
-    --secondaryColor: #fff;
+:root {
+	--mainColor: #eaeaea;
+	--secondaryColor: #fff;
 
-    --borderColor: #c1c1c1;
+	--borderColor: #c1c1c1;
 
-    --maintext: black;
-    --secondaryText: #4b5156;
+	--mainText: black;
+	--secondaryText: #4b5156;
 
-    --themeDotBorde: #24292e;
+	--themeDotBorder: #24292e;
 
-    --previewBg: rgp(251, 249, 243, 0.8);
-    --shadoww: #f0ead6;
+	--previewBg: rgb(251, 249, 243, 0.8);
+	--previewShadow: #f0ead6;
 }
