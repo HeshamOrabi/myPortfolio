@@ -317,6 +317,9 @@ h6 {
 	gap: 100px;
 }
 
+hr{
+	width: 300px;
+}
 
 #skills {
 	display: flex;
