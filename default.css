@@ -318,7 +318,8 @@ h6 {
 }
 
 hr{
-	width: 300px;
+	width: 600px;
+
 }
 
 #skills {
@@ -348,6 +349,10 @@ hr{
 		justify-content: center;
 	}
 
+	hr{
+		width: 400px;
+	}
+
 }
 
 @media screen and (max-width: 400px) {
@@ -360,7 +365,10 @@ hr{
 
 	#preview {
 		width: 280px;
+	}
 
+	hr{
+		width: 200px;
 	}
 
 }
