@@ -29,11 +29,12 @@
   status = 301
   force = true
 
+# Trailing-slash canonicals must NOT use force: with force, Netlify also matches
+# the destination path and redirects /privacy/ -> /privacy/ forever (same for /ar/).
 [[redirects]]
   from = "/privacy"
   to = "/privacy/"
   status = 301
-  force = true
 
 [[redirects]]
   from = "/privacy/index.html"
@@ -45,7 +46,6 @@
   from = "/ar"
   to = "/ar/"
   status = 301
-  force = true
 
 [[redirects]]
   from = "/ar/index.html"
@@ -57,7 +57,6 @@
   from = "/ar/privacy"
   to = "/ar/privacy/"
   status = 301
-  force = true
 
 [[redirects]]
   from = "/ar/privacy/index.html"
@@ -65,6 +64,7 @@
   status = 301
   force = true
 
+# Only unmatched Arabic paths; existing /ar/ and /ar/privacy/ files still win.
 [[redirects]]
   from = "/ar/*"
   to = "/ar/404.html"
