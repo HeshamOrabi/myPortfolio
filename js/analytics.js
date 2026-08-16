@@ -24,6 +24,9 @@
     window.dataLayer.push(arguments);
   }
 
+  // Expose the same global surface as Google's install snippet.
+  window.gtag = gtag;
+
   function getLinkLocation(link) {
     if (link.closest(".header-social")) return "header";
     if (link.closest(".drawer")) return "mobile_menu";
