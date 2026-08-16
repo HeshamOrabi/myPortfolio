@@ -27,11 +27,13 @@
   from = "/index.html"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/privacy/index.html"
   to = "/privacy/"
   status = 301
+  force = true
 
 [[headers]]
   for = "/*"
