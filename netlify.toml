@@ -2,6 +2,9 @@
   command = "python3 scripts/build.py"
   publish = "dist"
 
+[build.environment]
+  NODE_VERSION = "22"
+
 [[redirects]]
   from = "http://www.heshamorabi.com/*"
   to = "https://heshamorabi.com/:splat"
