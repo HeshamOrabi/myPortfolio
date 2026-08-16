@@ -14,3 +14,6 @@ dist/
 *.pfx
 __pycache__/
 *.py[cod]
+playwright-report/
+test-results/
+.qa-responsive/

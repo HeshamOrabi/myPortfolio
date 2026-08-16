@@ -24,6 +24,73 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html[lang^="ar"] body,
+html[dir="rtl"] body {
+  font-family: var(--font-ar);
+  letter-spacing: 0;
+  line-height: 1.7;
+}
+
+html[lang^="ar"] h1,
+html[lang^="ar"] h2,
+html[lang^="ar"] h3,
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3 {
+  font-family: var(--font-ar);
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.lang-switch a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding-inline: 0.15rem;
+  opacity: 0.62;
+  transition: opacity 300ms ease;
+}
+
+.lang-switch a:hover,
+.lang-switch a[aria-current="page"] {
+  opacity: 1;
+}
+
+.lang-switch a[aria-current="page"] {
+  border-bottom: 1px solid rgba(239, 238, 233, 0.42);
+}
+
+.lang-switch [aria-hidden="true"] {
+  opacity: 0.35;
+}
+
+.lang-switch--drawer {
+  margin-block: 0.5rem 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 body.is-locked {
   overflow: hidden;
 }
@@ -52,7 +119,9 @@ ul,
 ol {
   margin: 0;
   padding: 0;
+  /* Empty type restores list semantics in Safari/WebKit after removing markers. */
   list-style: none;
+  list-style-type: "";
 }
 
 h1,
@@ -88,7 +157,7 @@ p {
 
 .skip-link {
   position: absolute;
-  left: var(--gutter);
+  inset-inline-start: var(--gutter);
   top: -100px;
   z-index: 60;
   padding: 0.75rem 1rem;
@@ -162,7 +231,7 @@ p {
 .role-kicker {
   position: absolute;
   inset-inline: 0;
-  top: 8.25rem;
+  top: calc(8.25rem + env(safe-area-inset-top, 0px));
   z-index: 30;
   margin: 0;
   padding: 0 var(--gutter);
@@ -224,11 +293,43 @@ p {
   -webkit-text-stroke: 1.25px rgba(239, 238, 233, 0.55);
   text-stroke: 1.25px rgba(239, 238, 233, 0.55);
   animation: marquee var(--marquee-duration) linear infinite;
-  will-change: transform;
+}
+
+.marquee-wrap.is-paused .marquee,
+.marquee-wrap:hover .marquee,
+.marquee-wrap:focus-within .marquee,
+.marquee-wrap:has(+ .marquee-toggle:hover) .marquee,
+.marquee-wrap:has(+ .marquee-toggle:focus-visible) .marquee {
+  animation-play-state: paused;
+}
+
+.marquee-toggle {
+  position: absolute;
+  inset-inline-end: max(var(--gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  z-index: 35;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid rgba(239, 238, 233, 0.28);
+  background: rgba(11, 11, 11, 0.72);
+  color: rgba(239, 238, 233, 0.82);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.marquee-toggle:hover,
+.marquee-toggle[aria-pressed="true"] {
+  color: var(--cream);
+  border-color: rgba(239, 238, 233, 0.5);
 }
 
 .marquee span {
-  padding-right: 10vw;
+  padding-inline-end: 10vw;
   padding-bottom: 0.08em;
 }
 
@@ -241,6 +342,36 @@ p {
   }
 }
 
+html[dir="rtl"] .marquee-wrap {
+  mask-image: linear-gradient(
+    270deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    270deg,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+html[dir="rtl"] .marquee {
+  animation-name: marquee-rtl;
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+
 /* Portrait */
 .portrait {
   /* Anchored from the top so the head always sits at the same height; the
@@ -248,7 +379,7 @@ p {
      Width drives the scale, the matching aspect-ratio prevents distortion. */
   --portrait-width: min(118vw, 84dvh);
   /* rem-based so the figure always starts below the rem-positioned kicker */
-  --portrait-top: 11rem;
+  --portrait-top: calc(11rem + env(safe-area-inset-top, 0px));
 
   position: absolute;
   top: var(--portrait-top);
@@ -307,6 +438,7 @@ p {
 .header-cluster {
   display: none;
   align-items: center;
+  gap: 1rem;
 }
 
 .header-social {
@@ -352,7 +484,7 @@ p {
 
 .hamburger-bars span {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   width: 100%;
   height: 2px;
   background: var(--cream);
@@ -403,25 +535,32 @@ p {
 }
 
 .drawer {
+  /* Transforms are physical, so the closed offset flips with the writing mode
+     through a variable instead of a higher-specificity RTL override. */
+  --drawer-closed-x: 100%;
   position: fixed;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   z-index: 45;
   width: min(88%, 24rem);
   max-width: 24rem;
-  min-height: 100vh;
+  height: 100vh;
   height: 100dvh;
-  padding:
-    max(4.5rem, calc(2.5rem + env(safe-area-inset-top, 0px)))
-    max(1.5rem, env(safe-area-inset-right, 0px))
-    max(2rem, env(safe-area-inset-bottom, 0px))
-    2rem;
+  padding-block-start: max(4.5rem, calc(2.5rem + env(safe-area-inset-top, 0px)));
+  padding-block-end: max(2rem, env(safe-area-inset-bottom, 0px));
+  padding-inline-start: 2rem;
+  /* Logical env() safe-area names are not implemented; cover both physical sides. */
+  padding-inline-end: max(1.5rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   background: var(--panel);
-  transform: translateX(100%);
+  transform: translateX(var(--drawer-closed-x));
   transition: transform 600ms var(--ease-drawer);
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+}
+
+html[dir="rtl"] .drawer {
+  --drawer-closed-x: -100%;
 }
 
 .drawer.is-open {
@@ -430,7 +569,7 @@ p {
 
 .drawer-close {
   position: absolute;
-  right: max(1rem, env(safe-area-inset-right, 0px));
+  inset-inline-end: max(1rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   top: max(1rem, env(safe-area-inset-top, 0px));
   z-index: 50;
   display: inline-flex;
@@ -604,6 +743,10 @@ p {
     color: var(--cream);
     transform: translateX(0.25rem);
   }
+
+  html[dir="rtl"] .row:hover .row-index {
+    transform: translateX(-0.25rem);
+  }
 }
 
 @media (hover: none) {
@@ -634,7 +777,7 @@ p {
 
 .row-list li {
   position: relative;
-  padding-left: 0.9rem;
+  padding-inline-start: 0.9rem;
   color: rgba(239, 238, 233, 0.78);
   font-size: 0.9375rem;
 }
@@ -642,7 +785,7 @@ p {
 .row-list li::before {
   content: "";
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0.62em;
   width: 4px;
   height: 1px;
@@ -693,7 +836,7 @@ p {
 }
 
 .about-aside .row-list li {
-  padding-left: 0;
+  padding-inline-start: 0;
   border-bottom: 1px solid rgba(239, 238, 233, 0.1);
   padding-bottom: 0.9rem;
 }
@@ -718,7 +861,7 @@ p {
 .contact-card {
   padding: clamp(1.25rem, 3vw, 1.75rem);
   border: 1px solid rgba(239, 238, 233, 0.16);
-  text-align: left;
+  text-align: start;
 }
 
 .contact-card-title {
@@ -733,7 +876,7 @@ p {
    in em and stay locked to the first line of the entry at any breakpoint. */
 .contact-tree li {
   position: relative;
-  padding-left: 1.6rem;
+  padding-inline-start: 1.6rem;
   font-size: clamp(1rem, 1.6vw, 1.1875rem);
 }
 
@@ -741,7 +884,7 @@ p {
 .contact-tree li::before {
   content: "";
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   bottom: 0;
   width: 1px;
@@ -762,7 +905,7 @@ p {
 .contact-tree li::after {
   content: "";
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: calc(0.6rem + 0.7em);
   width: 0.85rem;
   height: 1px;
@@ -779,10 +922,16 @@ p {
   font-size: inherit;
 }
 
+html[dir="rtl"] .contact-tree a {
+  align-items: flex-start;
+}
+
 .contact-name {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   transition: transform 400ms var(--ease-editorial);
 }
 
@@ -802,6 +951,10 @@ p {
   transition: color 400ms ease, transform 400ms var(--ease-editorial);
 }
 
+html[dir="rtl"] .contact-name::after {
+  content: "\2196";
+}
+
 .contact-meta {
   flex-shrink: 0;
   font-size: 0.6875rem;
@@ -811,15 +964,13 @@ p {
   transition: color 400ms ease;
 }
 
-/* addresses are long and the cards are narrow */
-.contact-name {
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
 @media (hover: hover) {
   .contact-tree a:hover .contact-name {
     transform: translateX(0.35rem);
+  }
+
+  html[dir="rtl"] .contact-tree a:hover .contact-name {
+    transform: translateX(-0.35rem);
   }
 
   .contact-tree a:hover .contact-name::after,
@@ -829,6 +980,10 @@ p {
 
   .contact-tree a:hover .contact-name::after {
     transform: translate(0.15rem, -0.15rem);
+  }
+
+  html[dir="rtl"] .contact-tree a:hover .contact-name::after {
+    transform: translate(-0.15rem, -0.15rem);
   }
 
   .contact-tree a:hover .contact-meta {
@@ -853,6 +1008,11 @@ p {
 }
 
 .footer-privacy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   color: inherit;
   text-decoration: underline;
   text-decoration-color: rgba(239, 238, 233, 0.3);
@@ -946,7 +1106,7 @@ p {
 .error-brand {
   position: absolute;
   top: max(1.5rem, env(safe-area-inset-top, 0px));
-  left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  inset-inline-start: max(var(--gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   display: inline-flex;
   width: 5rem;
   height: 5rem;
@@ -1093,14 +1253,16 @@ p {
   }
 }
 
-/* Scroll reveal for content below the hero */
-.reveal {
+/* Scroll reveal for content below the hero. The hidden state is scoped to
+   .js-reveal, which main.js only sets once it can actually run the observer,
+   so content stays readable if the script never executes. */
+.js-reveal .reveal {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 700ms var(--ease-editorial), transform 700ms var(--ease-editorial);
 }
 
-.reveal.is-visible {
+.js-reveal .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
@@ -1110,6 +1272,14 @@ p {
 }
 
 /* ============ RESPONSIVE ============ */
+@media (max-width: 359px) {
+  /* Keep long email addresses intact at the narrowest supported width without
+     changing card spacing or type scale at larger mobile sizes. */
+  .contact-tree li {
+    font-size: 0.9375rem;
+  }
+}
+
 @media (min-width: 480px) {
   .row-list--grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1137,7 +1307,7 @@ p {
 
   .role-kicker {
     /* just under the 9rem header row */
-    top: 9.75rem;
+    top: calc(9.75rem + env(safe-area-inset-top, 0px));
     font-size: 0.8125rem;
   }
 
@@ -1150,7 +1320,7 @@ p {
   .portrait {
     /* scaled down a notch from the previous 86dvh framing */
     --portrait-width: max(55dvh, min(76dvh, 54vw));
-    --portrait-top: 11.5rem;
+    --portrait-top: calc(11.5rem + env(safe-area-inset-top, 0px));
   }
 
   .header-cluster {
@@ -1172,6 +1342,16 @@ p {
     -webkit-text-stroke-width: 1.75px;
   }
 
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  /* The desktop kicker type scale starts at 640px, but its English copy needs
+     tighter tracking until the tablet content width is available. */
+  .role-kicker-inner {
+    gap: 0.25rem 0.5rem;
+    letter-spacing: 0.15em;
+    padding-inline-start: 0.15em;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1229,13 +1409,33 @@ p {
 
 /* Short landscape screens need the same visual hierarchy with less vertical
    dead space. Width-based rules alone cannot cover this class of device. */
-@media (min-width: 640px) and (max-height: 800px) {
+@media (max-height: 480px) {
   .role-kicker {
-    top: 7.5rem;
+    top: calc(5rem + env(safe-area-inset-top, 0px));
+    font-size: 0.5625rem;
   }
 
   .portrait {
-    --portrait-top: 8.75rem;
+    --portrait-top: calc(6.25rem + env(safe-area-inset-top, 0px));
+    --portrait-width: max(48dvh, min(70dvh, 62vw));
+  }
+
+  .marquee-wrap {
+    top: 16vh;
+  }
+
+  .marquee {
+    font-size: 16vh;
+  }
+}
+
+@media (min-width: 640px) and (max-height: 800px) {
+  .role-kicker {
+    top: calc(7.5rem + env(safe-area-inset-top, 0px));
+  }
+
+  .portrait {
+    --portrait-top: calc(8.75rem + env(safe-area-inset-top, 0px));
     --portrait-width: max(54dvh, min(74dvh, 50vw));
   }
 
@@ -1246,6 +1446,93 @@ p {
   .marquee {
     font-size: 22vh;
   }
+}
+
+@media (min-width: 640px) and (max-height: 420px) {
+  .hero-header {
+    padding:
+      calc(1rem + env(safe-area-inset-top, 0px))
+      max(var(--gutter), env(safe-area-inset-right, 0px))
+      1rem
+      max(var(--gutter), env(safe-area-inset-left, 0px));
+  }
+
+  .brand {
+    min-width: 4rem;
+    min-height: 4rem;
+  }
+
+  .brand-logo {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .role-kicker {
+    top: calc(5.75rem + env(safe-area-inset-top, 0px));
+  }
+
+  .portrait {
+    --portrait-top: calc(7rem + env(safe-area-inset-top, 0px));
+    --portrait-width: max(44dvh, min(60dvh, 40vw));
+  }
+
+  .marquee-wrap {
+    top: 27vh;
+  }
+
+  .marquee {
+    font-size: 20vh;
+  }
+}
+
+html[lang^="ar"] .label,
+html[lang^="ar"] .role-kicker,
+html[lang^="ar"] .contact-card-title,
+html[lang^="ar"] .contact-meta,
+html[lang^="ar"] .drawer-label,
+html[lang^="ar"] .about-aside h3 {
+  letter-spacing: 0.06em;
+  text-transform: none;
+}
+
+html[lang^="ar"] .section-title {
+  max-width: 18ch;
+}
+
+html[lang^="ar"] .legal-content > h1 {
+  max-width: 12ch;
+}
+
+html[lang^="ar"] .error-title {
+  max-width: 16ch;
+}
+
+html[lang^="ar"] .marquee {
+  letter-spacing: 0;
+}
+
+@media (min-width: 640px) {
+  .header-actions {
+    display: none;
+  }
+}
+
+.legal-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.lang-switch--error {
+  justify-content: center;
+  margin-block-start: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+html[lang^="ar"] .lang-switch {
+  letter-spacing: 0.04em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1265,7 +1552,8 @@ p {
     transform: none !important;
   }
 
-  .reveal {
+  .reveal,
+  .js-reveal .reveal {
     opacity: 1;
     transform: none;
     transition: none !important;

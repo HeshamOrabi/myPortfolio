@@ -3,9 +3,15 @@
 
 from pathlib import Path
 from html import escape
+import base64
+import hashlib
 import os
 import re
 import shutil
+
+INLINE_SCRIPT_RE = re.compile(
+    r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>", re.DOTALL | re.IGNORECASE
+)
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -15,6 +21,10 @@ FILES = (
     "index.html",
     "404.html",
     "privacy/index.html",
+    "ar/index.html",
+    "ar/404.html",
+    "ar/privacy/index.html",
+    "ar/site.webmanifest",
     "robots.txt",
     "sitemap.xml",
     "site.webmanifest",
@@ -25,6 +35,8 @@ FILES = (
     "css/tokens.css",
     "js/main.js",
     "js/analytics.js",
+    "fonts/NotoSansArabic-Regular.woff2",
+    "fonts/NotoSansArabic-OFL.txt",
     "images/hesham-orabi-portrait.webp",
     "images/hesham-orabi-portrait-mobile.webp",
     "images/logo-128.webp",
@@ -36,6 +48,7 @@ FILES = (
     "images/apple-touch-icon.png",
     "images/icon-192.png",
     "images/icon-512.png",
+    "images/icon-maskable-512.png",
 )
 
 
@@ -71,10 +84,42 @@ def normalize_search_console_token(raw: str) -> str:
     return ""
 
 
+def verify_csp_script_hashes() -> int:
+    """Fail the build when an inline script is not allow-listed in the CSP.
+
+    The policy pins inline JSON-LD by hash, so editing that markup silently
+    breaks the page under CSP unless netlify.toml is updated alongside it.
+    """
+    policy = (ROOT / "netlify.toml").read_text(encoding="utf-8")
+    missing = []
+    checked = 0
+
+    for relative in FILES:
+        if not relative.endswith(".html"):
+            continue
+        html = (ROOT / relative).read_text(encoding="utf-8")
+        for match in INLINE_SCRIPT_RE.finditer(html):
+            checked += 1
+            digest = hashlib.sha256(match.group(1).encode("utf-8")).digest()
+            token = f"sha256-{base64.b64encode(digest).decode()}"
+            if token not in policy:
+                missing.append(f"{relative}: {token}")
+
+    if missing:
+        raise SystemExit(
+            "Inline scripts missing from the Content-Security-Policy:\n  "
+            + "\n  ".join(missing)
+        )
+
+    return checked
+
+
 def main() -> None:
     missing = [relative for relative in FILES if not (ROOT / relative).is_file()]
     if missing:
         raise SystemExit(f"Missing production files: {', '.join(missing)}")
+
+    inline_scripts = verify_csp_script_hashes()
 
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -102,13 +147,13 @@ def main() -> None:
             content = source.read_text(encoding="utf-8")
             if ga4_id:
                 content = re.sub(
-                    r'const GA4_MEASUREMENT_ID = "[^"]*";',
-                    f'const GA4_MEASUREMENT_ID = "{ga4_id}";',
+                    r'(?:const|var) GA4_MEASUREMENT_ID = "[^"]*";',
+                    f'var GA4_MEASUREMENT_ID = "{ga4_id}";',
                     content,
                     count=1,
                 )
             destination.write_text(content, encoding="utf-8")
-        elif relative == "index.html":
+        elif relative in {"index.html", "ar/index.html"}:
             verification = ""
             if search_console_token:
                 verification = (
@@ -132,15 +177,21 @@ def main() -> None:
     effective_ga4 = ga4_id
     if not effective_ga4:
         match = re.search(
-            r'const GA4_MEASUREMENT_ID = "(G-[A-Z0-9]+)";',
+            r'(?:const|var) GA4_MEASUREMENT_ID = "(G-[A-Z0-9]+)";',
             (ROOT / "js" / "analytics.js").read_text(encoding="utf-8"),
             re.IGNORECASE,
         )
         effective_ga4 = match.group(1) if match else ""
 
     analytics_status = f"enabled ({effective_ga4})" if effective_ga4 else "disabled"
-    search_status = "included" if search_console_token else "not configured"
+    if search_console_token:
+        search_status = "meta tag included"
+    elif (ROOT / "google89f5d47728259c41.html").is_file():
+        search_status = "HTML verification file included"
+    else:
+        search_status = "not configured"
     print(f"Built {len(FILES)} production files in {DIST}")
+    print(f"CSP: {inline_scripts} inline scripts verified against netlify.toml")
     print(f"GA4: {analytics_status}; Search Console verification: {search_status}")
     if deploy_context in {"deploy-preview", "branch-deploy"}:
         print(f"Indexing: disabled for {deploy_context}")

@@ -1,9 +1,19 @@
+@font-face {
+  font-family: "Noto Sans Arabic";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/NotoSansArabic-Regular.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
 :root {
   --cream: #efeee9;
   --ink: #0b0b0b;
   --panel: #141414;
 
   --font-hn: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ar: "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-drawer: cubic-bezier(0.76, 0, 0.24, 1);

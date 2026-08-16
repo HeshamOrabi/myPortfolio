@@ -1,0 +1,19 @@
+{
+  "name": "hesham-orabi-portfolio",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "python3 scripts/build.py",
+    "pretest": "npm run build",
+    "test": "playwright test",
+    "test:security": "python3 scripts/security_analytics_audit.py",
+    "test:headed": "npm run build && playwright test --headed",
+    "test:update": "npm run build && playwright test --update-snapshots"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.2"
+  }
+}

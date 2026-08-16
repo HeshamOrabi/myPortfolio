@@ -1,4 +1,4 @@
 Contact: mailto:social@heshamorabi.com
 Canonical: https://heshamorabi.com/.well-known/security.txt
-Preferred-Languages: en
+Preferred-Languages: en, ar
 Expires: 2027-08-16T00:00:00.000Z
