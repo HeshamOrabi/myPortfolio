@@ -1,1 +1,16 @@
 node_modules
+.cursor/
+.DS_Store
+.shots/
+dist/
+.netlify/
+.env
+.env.*
+!.env.example
+*.log
+*.pem
+*.key
+*.p12
+*.pfx
+__pycache__/
+*.py[cod]

@@ -1,0 +1,21 @@
+:root {
+  --cream: #efeee9;
+  --ink: #0b0b0b;
+  --panel: #141414;
+
+  --font-hn: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-drawer: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --gutter: 1.5rem;
+  --gutter-lg: 2.5rem;
+
+  --marquee-duration: 48s;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 2.5rem;
+  }
+}
