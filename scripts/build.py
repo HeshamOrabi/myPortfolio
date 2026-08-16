@@ -39,6 +39,38 @@ FILES = (
 )
 
 
+def normalize_search_console_token(raw: str) -> str:
+    """Accept common Netlify paste mistakes; return '' if unusable."""
+    value = raw.strip().strip("\"'")
+    if not value:
+        return ""
+
+    # Full meta tag pasted by mistake
+    meta = re.search(
+        r'content\s*=\s*["\']([A-Za-z0-9_-]+)["\']',
+        value,
+        re.IGNORECASE,
+    )
+    if meta:
+        return meta.group(1)
+
+    # HTML-file verification name pasted into the meta-token env var
+    file_match = re.fullmatch(
+        r"(google[A-Za-z0-9_-]+)\.html?",
+        value,
+        re.IGNORECASE,
+    )
+    if file_match:
+        # Meta tokens and HTML filenames are different GSC methods.
+        # Keep the HTML file in the bundle; do not invent a meta token.
+        return ""
+
+    if re.fullmatch(r"[A-Za-z0-9_-]+", value):
+        return value
+
+    return ""
+
+
 def main() -> None:
     missing = [relative for relative in FILES if not (ROOT / relative).is_file()]
     if missing:
@@ -48,15 +80,18 @@ def main() -> None:
         shutil.rmtree(DIST)
 
     ga4_id = os.getenv("GA4_MEASUREMENT_ID", "").strip()
-    search_console_token = os.getenv("GOOGLE_SITE_VERIFICATION", "").strip()
+    raw_search_console = os.getenv("GOOGLE_SITE_VERIFICATION", "").strip()
+    search_console_token = normalize_search_console_token(raw_search_console)
 
     if ga4_id and not re.fullmatch(r"G-[A-Z0-9]+", ga4_id, re.IGNORECASE):
         raise SystemExit("GA4_MEASUREMENT_ID must use the G-XXXXXXXXXX format")
 
-    if search_console_token and not re.fullmatch(
-        r"[A-Za-z0-9_-]+", search_console_token
-    ):
-        raise SystemExit("GOOGLE_SITE_VERIFICATION contains unexpected characters")
+    if raw_search_console and not search_console_token:
+        print(
+            "Warning: GOOGLE_SITE_VERIFICATION ignored "
+            "(use the meta content token only, or remove the env var — "
+            "HTML file verification is already shipped)."
+        )
 
     for relative in FILES:
         source = ROOT / relative
