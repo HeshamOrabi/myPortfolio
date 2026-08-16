@@ -175,33 +175,6 @@
       });
     }
 
-    var marqueeWrap = document.querySelector(".marquee-wrap");
-    var marqueeToggle = document.querySelector("[data-marquee-toggle]");
-    if (marqueeWrap && marqueeToggle) {
-      var pauseLabel =
-        marqueeToggle.getAttribute("data-marquee-pause") || "Pause name animation";
-      var playLabel =
-        marqueeToggle.getAttribute("data-marquee-play") || "Play name animation";
-      var marqueeLabel = marqueeToggle.querySelector("[data-marquee-label]");
-
-      function setMarqueePaused(paused) {
-        marqueeWrap.classList.toggle("is-paused", paused);
-        marqueeToggle.setAttribute("aria-pressed", String(paused));
-        if (marqueeLabel) {
-          marqueeLabel.textContent = paused ? playLabel : pauseLabel;
-        }
-      }
-
-      if (reduceMotion) {
-        setMarqueePaused(true);
-        marqueeToggle.hidden = true;
-      } else {
-        marqueeToggle.addEventListener("click", function () {
-          setMarqueePaused(!marqueeWrap.classList.contains("is-paused"));
-        });
-      }
-    }
-
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape" && drawerIsOpen()) {
         setDrawer(false);

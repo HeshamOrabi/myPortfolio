@@ -295,37 +295,8 @@ p {
   animation: marquee var(--marquee-duration) linear infinite;
 }
 
-.marquee-wrap.is-paused .marquee,
-.marquee-wrap:hover .marquee,
-.marquee-wrap:focus-within .marquee,
-.marquee-wrap:has(+ .marquee-toggle:hover) .marquee,
-.marquee-wrap:has(+ .marquee-toggle:focus-visible) .marquee {
+.marquee-wrap:hover .marquee {
   animation-play-state: paused;
-}
-
-.marquee-toggle {
-  position: absolute;
-  inset-inline-end: max(var(--gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-  z-index: 35;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid rgba(239, 238, 233, 0.28);
-  background: rgba(11, 11, 11, 0.72);
-  color: rgba(239, 238, 233, 0.82);
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.marquee-toggle:hover,
-.marquee-toggle[aria-pressed="true"] {
-  color: var(--cream);
-  border-color: rgba(239, 238, 233, 0.5);
 }
 
 .marquee span {
@@ -1509,6 +1480,12 @@ html[lang^="ar"] .error-title {
 
 html[lang^="ar"] .marquee {
   letter-spacing: 0;
+  /* Arabic glyphs need more descender room than the Latin outline stroke. */
+  line-height: 1.12;
+}
+
+html[lang^="ar"] .marquee span {
+  padding-bottom: 0.32em;
 }
 
 @media (min-width: 640px) {
