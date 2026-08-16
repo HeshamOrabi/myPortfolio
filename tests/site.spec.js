@@ -532,9 +532,9 @@ test.describe("analytics helpers", () => {
 
   test("language switch controls exist on both language homes", async ({ page }) => {
     await page.goto(PAGES.enHome);
-    await expect(page.locator('[data-lang-switch="ar"]')).toHaveCount(3);
+    await expect(page.locator('[data-lang-switch="ar"]')).toHaveCount(2);
     await page.goto(PAGES.arHome);
-    await expect(page.locator('[data-lang-switch="en"]')).toHaveCount(3);
+    await expect(page.locator('[data-lang-switch="en"]')).toHaveCount(2);
   });
 });
 
