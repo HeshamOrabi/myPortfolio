@@ -236,7 +236,7 @@ p {
   margin: 0;
   padding: 0 var(--gutter);
   text-align: center;
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   text-transform: uppercase;
   color: rgba(239, 238, 233, 0.68);
@@ -928,7 +928,7 @@ html[dir="rtl"] .contact-name::after {
 
 .contact-meta {
   flex-shrink: 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(239, 238, 233, 0.62);
@@ -1283,9 +1283,9 @@ html[dir="rtl"] .contact-name::after {
   }
 
   .role-kicker-inner {
-    flex-wrap: nowrap;
-    letter-spacing: 0.3em;
-    padding-inline-start: 0.3em;
+    flex-wrap: wrap;
+    letter-spacing: 0.22em;
+    padding-inline-start: 0.22em;
   }
 
   .portrait {
@@ -1296,6 +1296,10 @@ html[dir="rtl"] .contact-name::after {
 
   .header-cluster {
     display: flex;
+  }
+
+  .header-social {
+    display: none;
   }
 
   .hamburger,
@@ -1315,6 +1319,14 @@ html[dir="rtl"] .contact-name::after {
 
 }
 
+@media (min-width: 960px) {
+  .role-kicker-inner {
+    flex-wrap: nowrap;
+    letter-spacing: 0.28em;
+    padding-inline-start: 0.28em;
+  }
+}
+
 @media (min-width: 640px) and (max-width: 767px) {
   /* The desktop kicker type scale starts at 640px, but its English copy needs
      tighter tracking until the tablet content width is available. */
@@ -1322,6 +1334,12 @@ html[dir="rtl"] .contact-name::after {
     gap: 0.25rem 0.5rem;
     letter-spacing: 0.15em;
     padding-inline-start: 0.15em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-social {
+    display: flex;
   }
 }
 
@@ -1383,7 +1401,7 @@ html[dir="rtl"] .contact-name::after {
 @media (max-height: 480px) {
   .role-kicker {
     top: calc(5rem + env(safe-area-inset-top, 0px));
-    font-size: 0.5625rem;
+    font-size: 0.75rem;
   }
 
   .portrait {
@@ -1510,6 +1528,20 @@ html[lang^="ar"] .marquee span {
 
 html[lang^="ar"] .lang-switch {
   letter-spacing: 0.04em;
+}
+
+/* English wraps to two role lines at these narrow ranges; preserve a clear
+   boundary between the kicker and the portrait without shifting Arabic. */
+@media (max-width: 400px) {
+  html[lang^="en"] .portrait {
+    --portrait-top: calc(12rem + env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (min-width: 640px) and (max-width: 699px) {
+  html[lang^="en"] .portrait {
+    --portrait-top: calc(12.5rem + env(safe-area-inset-top, 0px));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

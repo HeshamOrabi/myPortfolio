@@ -42,6 +42,7 @@ FILES = (
     "images/logo-128.webp",
     "images/logo-256.webp",
     "images/hesham-orabi-social-preview.jpg",
+    "images/hesham-orabi-social-preview-ar.jpg",
     "images/favicon.ico",
     "images/favicon-48x48.png",
     "images/favicon-32x32.png",

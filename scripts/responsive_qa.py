@@ -44,7 +44,12 @@ HOME_VIEWPORTS = [
     ("w820", 820, 1180),
     ("tablet-large-portrait", 834, 1194),
     ("phone-landscape", 844, 390),
+    ("w959", 959, 800),
+    ("w960", 960, 800),
+    ("w961", 961, 800),
+    ("w1023", 1023, 768),
     ("tablet-landscape", 1024, 768),
+    ("w1025", 1025, 768),
     ("tablet-large-landscape", 1194, 834),
     ("w1280", 1280, 800),
     ("w1366", 1366, 768),
@@ -128,11 +133,17 @@ const images = [...document.images].filter(visible).map(image => {
   };
 });
 const brand = rect(".brand");
-const chrome = rect(innerWidth < 640 ? ".header-actions" : ".header-cluster");
-const overlap = brand && chrome
-  ? Math.max(0, Math.min(brand.right, chrome.right) - Math.max(brand.left, chrome.left)) *
-    Math.max(0, Math.min(brand.bottom, chrome.bottom) - Math.max(brand.top, chrome.top))
+const actions = rect(".header-actions");
+const social = rect(".header-social");
+const overlapArea = (first, second) => first && second
+  ? Math.max(0, Math.min(first.right, second.right) - Math.max(first.left, second.left)) *
+    Math.max(0, Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top))
   : 0;
+const overlap = Math.max(
+  overlapArea(brand, actions),
+  overlapArea(brand, social),
+  overlapArea(social, actions)
+);
 const kicker = rect(".role-kicker");
 const portrait = rect(".portrait");
 const portraitTransform = document.querySelector(".portrait")
@@ -146,12 +157,17 @@ return {
   clipped,
   images,
   headerOverlapArea: overlap,
-  headerBottom: Math.max(brand ? brand.bottom : 0, chrome ? chrome.bottom : 0),
+  headerBottom: Math.max(
+    brand ? brand.bottom : 0,
+    actions ? actions.bottom : 0,
+    social ? social.bottom : 0
+  ),
   kicker,
   portrait,
   portraitTransform,
   menuToggleVisible: Boolean(rect("[data-menu-toggle]")),
-  desktopClusterVisible: Boolean(rect(".header-cluster")),
+  languageSwitchVisible: Boolean(rect(".header-actions .lang-switch")),
+  desktopSocialVisible: Boolean(social),
   mainHeight: document.querySelector("main") ? document.querySelector("main").getBoundingClientRect().height : 0
 };
 """
@@ -394,8 +410,11 @@ def assert_layout(metrics: dict, route_type: str, width: int) -> list[str]:
         expected_mobile = width < 640
         if metrics["menuToggleVisible"] != expected_mobile:
             failures.append("mobile menu visibility does not match the 640px breakpoint")
-        if metrics["desktopClusterVisible"] == expected_mobile:
-            failures.append("desktop navigation visibility does not match the 640px breakpoint")
+        if not metrics["languageSwitchVisible"]:
+            failures.append("header language switch is not visible")
+        expected_social = width >= 1024
+        if metrics["desktopSocialVisible"] != expected_social:
+            failures.append("desktop social visibility does not match the 1024px breakpoint")
         kicker = metrics["kicker"]
         portrait = metrics["portrait"]
         if not kicker or kicker["top"] < -1 or kicker["bottom"] > metrics["viewport"][1] + 1:
@@ -656,7 +675,7 @@ def main() -> int:
             driver.viewport(width, height)
             for language, route in [("en", "/"), ("ar", "/ar/")]:
                 driver.navigate(args.base_url + route)
-                for section_id in ["about", "work", "process", "expertise", "contact"]:
+                for section_id in ["cases", "about", "experience", "work", "process", "expertise", "contact"]:
                     driver.execute(
                         f"""
                         const section = document.getElementById({json.dumps(section_id)});

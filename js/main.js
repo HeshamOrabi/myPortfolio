@@ -46,19 +46,20 @@
     var openLabel = (menuToggle && menuToggle.dataset.menuOpen) || "Open menu";
     var closeLabel = (menuToggle && menuToggle.dataset.menuClose) || "Close menu";
 
-    // Reloads should always open on the hero, even if a #section hash is left in the URL.
+    // Keep valid section hashes on reload and shared links. Invalid hashes
+    // fall back to the top of the page instead of leaving a stale offset.
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
 
-    var navEntry = performance.getEntriesByType("navigation")[0];
-    var isReload = Boolean(navEntry) && navEntry.type === "reload";
+    var hashId = window.location.hash.replace(/^#/, "");
+    var hashTarget = hashId ? document.getElementById(hashId) : null;
 
-    if (isReload && location.hash) {
-      history.replaceState(null, "", location.pathname + location.search);
-    }
-
-    if (isReload || !location.hash) {
+    if (hashTarget) {
+      window.requestAnimationFrame(function () {
+        hashTarget.scrollIntoView();
+      });
+    } else {
       window.scrollTo(0, 0);
     }
 

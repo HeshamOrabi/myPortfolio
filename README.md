@@ -2,7 +2,7 @@
 
 Personal site for [heshamorabi.com](https://heshamorabi.com), hosted on Netlify.
 
-Positioning: **Odoo technofunctional consultant · ERP project manager · IT infrastructure · IT BOQ & tender.**
+Positioning: **Odoo techno-functional consultant · ERP project manager**, with IT infrastructure, BOQ, and tender work as a supporting specialization.
 
 ## Design
 
@@ -55,7 +55,8 @@ edge, they render as straight vertical slices against the dark background.
 - `favicon.ico` / `favicon-48x48.png` / `favicon-32x32.png` — browser and search favicons
 - `apple-touch-icon.png` — iOS home-screen icon
 - `icon-192.png` / `icon-512.png` — web app manifest icons
-- `hesham-orabi-social-preview.jpg` — 1200×630 Open Graph card
+- `hesham-orabi-social-preview.jpg` — 1200×630 Open Graph card (English)
+- `hesham-orabi-social-preview-ar.jpg` — 1200×630 Open Graph card (Arabic)
 - `logo-128.webp` / `logo-256.webp` — header badge, recolored from `logo.png`
 
 `logo.png` is the original mark from the previous site: white lettering on a black disc. Because
@@ -79,8 +80,8 @@ are sent. GA first-party cookies use `Secure`, `SameSite=Lax`, a 90-day maximum 
 rolling expiry; details are published at `/privacy/`.
 
 After data begins arriving in GA4, mark `email_click`, `whatsapp_click`, and `linkedin_click` as
-key events in the GA4 Admin interface. Phone, contact-form, CV, and project events are deliberately
-not emitted because those interactions do not exist on the current site.
+key events in the GA4 Admin interface. Phone, contact-form, and CV events are not emitted because
+those interactions do not exist on the current site.
 
 ## Search indexing
 
@@ -97,7 +98,7 @@ not emitted because those interactions do not exist on the current site.
 - Netlify applies HSTS, a restrictive CSP, clickjacking protection, MIME-sniffing protection,
   referrer and permissions policies, and cross-origin isolation headers.
 - The CSP has no wildcard, `unsafe-inline`, or `unsafe-eval`; GA4 is the only external script.
-- `scripts/build.py` publishes an explicit 24-file allowlist. Preview and branch builds receive a
+- `scripts/build.py` publishes an explicit production allowlist. Preview and branch builds receive a
   generated `X-Robots-Tag: noindex, nofollow, noarchive` header and never send production analytics.
 - The site has no form, API, database, authentication, or upload surface. Server-side validation,
   CSRF, CORS, rate limiting, database backups, and password controls are therefore not applicable.
@@ -109,5 +110,6 @@ not emitted because those interactions do not exist on the current site.
 
 ## Still to personalise
 
-- Real project examples (content is capability-based; no invented stats)
-- Certifications (Odoo, PMP/PRINCE2) if applicable
+- Public CV download, if a current PDF is approved later
+- Professional GitHub repositories, if they can be made public
+- Named client permissions beyond the currently approved anonymized/named cases
