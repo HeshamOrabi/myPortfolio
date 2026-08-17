@@ -23,6 +23,13 @@
   status = 301
   force = true
 
+# Crawlers and browsers probe the root path regardless of the <link rel="icon">
+# tags, so serve the icon there as a rewrite rather than a 404.
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/images/favicon.ico"
+  status = 200
+
 [[redirects]]
   from = "/index.html"
   to = "/"
@@ -80,7 +87,7 @@
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     Cross-Origin-Opener-Policy = "same-origin"
     Cross-Origin-Resource-Policy = "same-site"
-    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; form-action 'none'; media-src 'none'; worker-src 'none'; script-src 'self' 'sha256-udcCjCqXxLEdbMVQcRJAQgjrwsaW4Sg/P+oqc2mMkVk=' 'sha256-xdkePslgHSb+CQ7SPBI5ScSf7qtzGH2PP9RS+ZUUHYk=' 'sha256-5cYIhVHlEdoeF/dkhJn8C0epVYKZ4cHiv+eaLI3fkQg=' 'sha256-Z9wFgwp9/9lEZZxhNccIfaq+f6AbN/NxEu4HeVwnwHI=' https://*.googletagmanager.com; script-src-attr 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self'; style-src-attr 'none'; font-src 'self'; manifest-src 'self'; upgrade-insecure-requests"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; frame-src 'none'; form-action 'none'; media-src 'none'; worker-src 'none'; script-src 'self' 'sha256-/4VgDQpMZyAWoi9GejxZRP/bArjFkDFvaQyAqMvvnrg=' 'sha256-6Ey/MhKzvZM//dRmPVpVlPdC2+88rJ2pPeDXhd5+DS0=' 'sha256-5cYIhVHlEdoeF/dkhJn8C0epVYKZ4cHiv+eaLI3fkQg=' 'sha256-Z9wFgwp9/9lEZZxhNccIfaq+f6AbN/NxEu4HeVwnwHI=' https://*.googletagmanager.com; script-src-attr 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self'; style-src-attr 'none'; font-src 'self'; manifest-src 'self'; upgrade-insecure-requests"
 
 [[headers]]
   for = "/images/*"

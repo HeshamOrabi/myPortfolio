@@ -39,6 +39,7 @@ FILES = (
     "fonts/NotoSansArabic-OFL.txt",
     "images/hesham-orabi-portrait.webp",
     "images/hesham-orabi-portrait-mobile.webp",
+    "images/avatar.webp",
     "images/logo-128.webp",
     "images/logo-256.webp",
     "images/hesham-orabi-social-preview.jpg",
